@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div class="container mt-2">
+
+        <div class="jumbotron">
+        <h1 class="display-5">Welcome Blog-World.com</h1>
+        <p class="lead">A reader lives a thousand lives before he dies</p>
+        <hr class="my-4">
+        <p>More Information Click Below</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        </p>
+        </div>
+        <hr>
+        <h2>Latest Post</h2>
+        <hr>
+        <div class="row">
+            {% for post  in post %}
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                            <img height="200px" class="card-img-top" src="{{post.postimage.url}}" alt="Card image cap">
+                            <hr>
+                            <div class="card-body">
+                                <h5 class="card-title">{{post.title}}</h5>
+                                <p class="card-text">{{post.overview|truncatewords:10}}</p>
+                                <a href="{% url 'postpage' post.sno %}" class="btn btn-primary">Go To Post</a>
+                            </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <br><br><br>
+</div>
+{% endblock body %}

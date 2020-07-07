@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+    {% for post in post %}
+        <div class="row my-2">
+          <div class="col">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                  
+               
+                  {% if  forloop.counter|divisibleby:'2' == 0 %}       
+                  <div class="col-auto d-none d-lg-block">
+                    <img height="200px" width="300px" src="{{post.postimage.url}}" alt="">
+                  </div>
+                  {% endif %}
+
+                  <div class="col p-4 d-flex flex-column position-static">
+
+                    <div>                   
+                      {% for cat in post.tag.all %}
+                    <span class="badge badge-secondary">{{cat}}</span>
+                      {% endfor %}
+                    </div>
+
+                    <h3 class="mb-0">{{post.title}}</h3>
+
+                    <div class="mb-1 text-muted">{{post.timestamp|timesince }}</div>
+
+                    <p class="card-text mb-auto">{{post.default|safe|truncatewords:20 }}</p>
+
+                    <a href="{% url 'postpage' post.sno %}" class="stretched-link">Continue reading</a>
+                  </div>
+                  {% if  forloop.counter|divisibleby:'2' != 0 %}   
+                  <div class="col-auto d-none d-lg-block">
+                    <img height="200px" width="300px" src="{{post.postimage.url}}" alt="">
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+        </div>
+    {% endfor %}
+{% endblock body %}

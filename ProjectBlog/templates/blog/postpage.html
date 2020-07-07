@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="col-md-12 mt-5">
+      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <img width="500px" src="{{post.postimage.url}}" alt="">
+        <div class="col p-4 d-flex flex-column position-static">
+
+            <div>                   
+                {% for cat in post.tag.all %}
+              <span class="badge badge-secondary">{{cat}}</span>
+                {% endfor %}
+              </div>
+          
+          <small class="d-inline-block mb-2 text-primary">{{post.author}}</small>
+          <h3 class="mb-0">{{post.title}}</h3>
+          <div class="mb-1 text-muted">{{post.timestamp|timesince}}</div>
+          <p class="card-text mb-auto">{{post.overview}}</p>
+        </div>
+      </div>
+    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    {{post.default|safe}}
+    </div>
+
+    <h1>Comments({{comment.count}})</h1>
+<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+   <div class="container">
+        <form action="" method="POST">
+          {% csrf_token %}
+              {{com}}
+        {% if user.is_authenticated %}
+        <input type="submit">
+        {% else %}
+        <button type="button" class="btn btn-primary ml-4" data-toggle="modal" data-target="#Login">
+          Login
+        </button>
+        {% endif %}
+
+        </form>
+    </div>
+
+
+    <div class="container">
+    {% for comment in comment  %}
+        <div class="container mt-2 border">
+              {{comment}} --> {{comment.commentBy}}
+              {% comment %} <a href="{% url 'commentdelete' comment.id  %}">delete</a> {% endcomment %}
+              <div class="col-md-1">
+              {% if user.is_authenticated %}
+              <div class="container btn btn-info"  data-toggle="collapse" href="#collapseExample{{comment.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  Reply
+              </div>
+              {% else %}
+              
+              {% endif %}
+              </div>
+                    
+            <div class="collapse" id="collapseExample{{comment.id}}">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{com}}
+                    <input type="hidden" name="parent" value={{comment.id}}>
+                    <input type="submit">
+                </form>
+            </div>
+
+          {% for reply in comment.parentcom.all %}     
+            <div class=" border mt-2 mb-2 ml-5">
+              {{reply}} 
+            </div>
+          {% endfor %}  
+
+        </div>   
+    
+    {% endfor %} 
+</div> 
+</div>
+{% endblock body %}
+
